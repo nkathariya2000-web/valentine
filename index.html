@@ -9,86 +9,78 @@
     margin: 0;
     height: 100vh;
     background: #ffb6c1;
-    font-family: 'Comic Sans MS', 'Trebuchet MS', cursive;
+    font-family: "Trebuchet MS", "Comic Sans MS", cursive;
     position: relative;
     overflow: hidden;
   }
 
   h1 {
-    color: #b30059;
     text-align: center;
-    margin-top: 80px;
+    margin-top: 70px;
     font-size: clamp(24px, 6vw, 42px);
+    color: #b30059;
   }
 
   #yes, #no {
     position: absolute;
     width: 170px;
     height: 60px;
-    font-size: 17px;
     border: none;
     border-radius: 14px;
+    font-size: 17px;
     cursor: pointer;
     z-index: 10;
-    font-family: inherit;
+    color: white;
   }
 
   #yes {
     background: #ff4f9a;
-    color: white;
     left: 20%;
     top: 60%;
   }
 
   #no {
     background: #d63384;
-    color: white;
     left: 60%;
     top: 60%;
   }
 
   #final {
     display: none;
-    color: #8b004f;
-    font-size: clamp(26px, 7vw, 44px);
     text-align: center;
+    font-size: clamp(26px, 7vw, 44px);
+    color: #8b004f;
     margin-top: 100px;
     z-index: 10;
   }
 
-  /* FIREWORKS */
+  /* Fireworks sparks */
   .spark {
     position: absolute;
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    animation: boom 1.2s linear forwards;
     pointer-events: none;
+    animation: explode 1.2s linear forwards;
   }
 
-  @keyframes boom {
+  @keyframes explode {
     from { opacity: 1; transform: translate(0,0); }
-    to   { opacity: 0; transform: translate(var(--x), var(--y)); }
+    to { opacity: 0; transform: translate(var(--x), var(--y)); }
   }
 
-  /* HEARTS */
+  /* Floating hearts */
   .heart {
     position: absolute;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp 6s linear forwards;
+    bottom: -30px;
+    font-size: 22px;
     pointer-events: none;
+    animation: floatUp 6s linear forwards;
   }
 
   @keyframes floatUp {
-    from {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(-110vh);
-      opacity: 0;
-    }
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-110vh); opacity: 0; }
   }
 </style>
 </head>
@@ -115,13 +107,14 @@
     "No, not happening 😆"
   ];
 
-  let index = 0;
-  let fireInterval;
+  let noIndex = 0;
+  let fireTimer;
+  let heartTimer;
 
   function noClick() {
     const noBtn = document.getElementById("no");
-    noBtn.innerText = noTexts[index % noTexts.length];
-    index++;
+    noBtn.innerText = noTexts[noIndex % noTexts.length];
+    noIndex++;
 
     const maxX = window.innerWidth - 180;
     const maxY = window.innerHeight - 100;
@@ -135,12 +128,12 @@
     document.getElementById("yes").style.display = "none";
     document.getElementById("no").style.display = "none";
 
-    fireInterval = setInterval(bigFirework, 500);
+    fireTimer = setInterval(bigFirework, 500);
 
     setTimeout(() => {
-      clearInterval(fireInterval);
+      clearInterval(fireTimer);
       document.getElementById("final").style.display = "block";
-      setInterval(createHeart, 400);
+      heartTimer = setInterval(createHeart, 400);
     }, 3500);
   }
 
@@ -149,9 +142,33 @@
     const y = Math.random() * window.innerHeight * 0.6;
 
     for (let i = 0; i < 45; i++) {
-      const s = document.createElement("div");
-      s.className = "spark";
-      s.style.left = x + "px";
-      s.style.top = y + "px";
-      s.style.background = randomColor();
-      s.style.setProperty("--x", (Math.random()*300 - 150) + "*
+      const spark = document.createElement("div");
+      spark.className = "spark";
+      spark.style.left = x + "px";
+      spark.style.top = y + "px";
+      spark.style.background = randomColor();
+      spark.style.setProperty("--x", (Math.random() * 300 - 150) + "px");
+      spark.style.setProperty("--y", (Math.random() * 300 - 150) + "px");
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 1200);
+    }
+  }
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💖";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (16 + Math.random() * 22) + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }
+
+  function randomColor() {
+    const colors = ["#ff4f9a", "#ffd700", "#ffffff", "#ff85b3", "#ff1f7a"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+</script>
+
+</body>
+</html>
