@@ -31,8 +31,9 @@
 
     #message {
       margin: 15px 0;
+      min-height: 22px;
       color: #555;
-      min-height: 20px;
+      font-weight: bold;
     }
 
     button {
@@ -42,7 +43,7 @@
       border-radius: 10px;
       cursor: pointer;
       margin: 10px;
-      transition: transform 0.25s ease;
+      transition: transform 0.3s ease;
     }
 
     #yesBtn {
@@ -68,11 +69,11 @@
   </div>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
     const message = document.getElementById("message");
 
-    const texts = [
+    const messages = [
       "Please say yes 🥺",
       "Nice try 😏",
       "Think again 💭",
@@ -80,5 +81,19 @@
       "You know you want to 💕"
     ];
 
-    let clickCount = 0;
-    const
+    let messageIndex = 0;
+    let yesScale = 1;
+    const maxScale = 2.5;
+
+    noBtn.addEventListener("click", () => {
+      // Show next message (no repeat bug)
+      message.textContent = messages[messageIndex];
+      messageIndex = (messageIndex + 1) % messages.length;
+
+      // Grow YES button every time
+      yesScale = Math.min(yesScale + 0.25, maxScale);
+      yesBtn.style.transform = `scale(${yesScale})`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      document.bo
