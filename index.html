@@ -1,49 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Will You Be My Valentine?</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #ffe6eb;
       font-family: Arial, sans-serif;
+      padding: 20px;
     }
 
     .card {
       background: white;
-      padding: 30px;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      width: 320px;
     }
 
     h1 {
       color: #e63946;
-      font-size: 24px;
+      font-size: clamp(20px, 5vw, 26px);
+      margin-bottom: 10px;
     }
 
     #message {
-      margin: 15px 0;
-      min-height: 22px;
+      min-height: 24px;
+      margin: 12px 0;
       color: #555;
       font-weight: bold;
+      font-size: clamp(14px, 4vw, 16px);
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     button {
-      padding: 12px 20px;
-      font-size: 16px;
+      padding: 12px 18px;
+      font-size: clamp(14px, 4vw, 16px);
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      margin: 10px;
       transition: transform 0.3s ease;
+      min-width: 110px;
     }
 
     #yesBtn {
@@ -64,8 +81,10 @@
 
     <div id="message"></div>
 
-    <button id="yesBtn">Yes 💕</button>
-    <button id="noBtn">No 💔</button>
+    <div class="buttons">
+      <button id="yesBtn">Yes 💕</button>
+      <button id="noBtn">No 💔</button>
+    </div>
   </div>
 
   <script>
@@ -83,17 +102,36 @@
 
     let messageIndex = 0;
     let yesScale = 1;
-    const maxScale = 2.5;
+    const maxScale = 1.8; // safe for mobile
 
     noBtn.addEventListener("click", () => {
-      // Show next message (no repeat bug)
+      // Rotate messages
       message.textContent = messages[messageIndex];
       messageIndex = (messageIndex + 1) % messages.length;
 
-      // Grow YES button every time
-      yesScale = Math.min(yesScale + 0.25, maxScale);
+      // Grow YES button responsively
+      yesScale = Math.min(yesScale + 0.15, maxScale);
       yesBtn.style.transform = `scale(${yesScale})`;
     });
 
     yesBtn.addEventListener("click", () => {
-      document.bo
+      document.body.innerHTML = `
+        <div style="
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #ffe6eb;
+          padding: 20px;
+          text-align: center;
+          font-family: Arial, sans-serif;
+        ">
+          <h1 style="color:#e63946; font-size:clamp(22px,6vw,32px);">
+            Yay! 💖 Happy Valentine’s Day 🥰
+          </h1>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
