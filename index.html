@@ -15,13 +15,13 @@
     overflow: hidden;
   }
 
-  /* MAIN QUESTION */
+  /* FIRST PAGE TEXT */
   h1 {
     text-align: center;
-    margin-top: 70px;
+    margin-top: 140px; /* ⬅ lowered from top */
     font-size: clamp(26px, 6vw, 44px);
-    color: white;
-    text-shadow: 0 0 12px rgba(255,255,255,0.7);
+    color: #8b004f; /* ⬅ same as final page */
+    text-shadow: 0 0 15px #ff4f9a;
   }
 
   #name {
@@ -55,7 +55,6 @@
     top: 60%;
   }
 
-  /* NO BUTTON BOUNCE */
   .bounce {
     animation: bounce 0.5s;
   }
@@ -67,18 +66,18 @@
     100% { transform: scale(1); }
   }
 
-  /* FINAL TEXT */
+  /* FINAL PAGE */
   #final {
     display: none;
     text-align: center;
-    margin-top: 90px;
+    margin-top: 100px;
     animation: popGlow 1.2s ease forwards;
   }
 
   .finalLine {
     font-size: clamp(22px, 6vw, 38px);
     color: #8b004f;
-    margin-top: 10px;
+    margin-top: 14px;
     text-shadow: 0 0 15px #ff4f9a;
   }
 
@@ -87,19 +86,12 @@
     to { opacity: 1; transform: scale(1); }
   }
 
-  /* PHOTO */
   #valPhoto {
-    margin-top: 20px;
+    margin-top: 22px;
     width: 240px;
     max-width: 80%;
     border-radius: 16px;
     box-shadow: 0 8px 25px rgba(255, 79, 154, 0.6);
-    animation: photoPop 1.2s ease forwards;
-  }
-
-  @keyframes photoPop {
-    from { opacity: 0; transform: scale(0.6); }
-    to { opacity: 1; transform: scale(1); }
   }
 
   /* FIREWORKS */
@@ -141,7 +133,7 @@
 </h1>
 
 <div id="final">
-  <div class="finalLine">Yay!I knew you would say yes 🥰</div>
+  <div class="finalLine">Yay! I knew you would say yes 🥰</div>
 
   <img id="valPhoto" src="valentine.jpg" alt="Valentine Photo">
 
@@ -152,8 +144,7 @@
 <button id="yes" onclick="yesClick()">Yes 💕</button>
 <button id="no" onclick="noClick()">No 💔</button>
 
-<!-- BACKGROUND MUSIC -->
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop preload="auto">
   <source src="love-music.mp3" type="audio/mpeg">
 </audio>
 
@@ -194,16 +185,15 @@
     document.getElementById("yes").style.display = "none";
     document.getElementById("no").style.display = "none";
 
-    const music = document.getElementById("bgMusic");
-    music.volume = 0.35;
-    music.play();
+    document.getElementById("bgMusic").volume = 0.35;
+    document.getElementById("bgMusic").play();
 
-    fireTimer = setInterval(bigFirework, 500);
+    fireTimer = setInterval(bigFirework, 450);
 
     setTimeout(() => {
       clearInterval(fireTimer);
       document.getElementById("final").style.display = "block";
-      setInterval(createHeart, 400);
+      setInterval(createHeart, 350);
     }, 3500);
   }
 
