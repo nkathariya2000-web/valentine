@@ -1,6 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #ffe6eb;
+    font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  h1 {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    text-align: center;
+    color: #e63946;
+  }
+
+  /* Message bubble */
+  #msg {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4f9a;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 18px;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 160px;
+    text-align: center;
+    display: none;
+  }
+
+  button {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #yes {
+    left: 8%;
+    top: 55%;
+    background: #2ecc71;
+    color: white;
+  }
+
+  #no {
+    right: 8%;
+    top: 55%;
+    background: #e74c3c;
+    color: white;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+  }
+
+  .shake {
+    animation: shake 0.3s;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine? 💖</h1>
+<div id="msg"></div>
+
+<button id="yes">Yes 💕</button>
+<button id="no">No 💔</button>
+
 <script>
-  const yes = document.getElementById("yes");
-  const no = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const noBtn = document.getElementById("no");
   const msg = document.getElementById("msg");
 
   const messages = [
@@ -14,41 +102,46 @@
 
   let clicks = 0;
 
-  no.onclick = () => {
+  noBtn.addEventListener("click", () => {
     // show message
     msg.style.display = "block";
     msg.textContent = messages[clicks % messages.length];
 
-    // 🔁 shake
-    no.classList.add("shake");
-    setTimeout(() => no.classList.remove("shake"), 300);
+    // shake
+    noBtn.classList.remove("shake"); // reset
+    void noBtn.offsetWidth;          // force reflow
+    noBtn.classList.add("shake");
 
-    // 📳 vibration (mobile only)
-    if (navigator.vibrate) {
-      navigator.vibrate([100, 50, 100]); // vibrate–pause–vibrate
+    // vibration (mobile)
+    if ("vibrate" in navigator) {
+      navigator.vibrate([120, 60, 120]);
     }
+
+    clicks++;
 
     // grow YES
-    clicks++;
-    const size = 110 + clicks * 40;
-    yes.style.width = size + "px";
-    yes.style.height = size + "px";
+    const size = 110 + clicks * 50;
+    yesBtn.style.width = size + "px";
+    yesBtn.style.height = size + "px";
 
-    // YES fills screen after 6 NOs
+    // YES fills screen
     if (clicks >= 6) {
-      yes.style.left = "0";
-      yes.style.top = "0";
-      yes.style.width = "100vw";
-      yes.style.height = "100vh";
-      yes.style.borderRadius = "0";
-      yes.style.fontSize = "32px";
-      no.style.display = "none";
+      yesBtn.style.left = "0";
+      yesBtn.style.top = "0";
+      yesBtn.style.width = "100vw";
+      yesBtn.style.height = "100vh";
+      yesBtn.style.borderRadius = "0";
+      yesBtn.style.fontSize = "32px";
+      noBtn.style.display = "none";
       msg.style.display = "none";
     }
-  };
+  });
 
-  yes.onclick = () => {
+  yesBtn.addEventListener("click", () => {
     document.body.innerHTML =
       "<h1 style='margin-top:40vh;text-align:center;color:#e63946;'>Yay! 💖 Happy Valentine’s Day 🥰</h1>";
-  };
+  });
 </script>
+
+</body>
+</html>
