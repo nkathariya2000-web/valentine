@@ -1,69 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Valentine 💖</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin-top: 80px;
-        }
+  <meta charset="UTF-8" />
+  <title>Will You Be My Valentine?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      overflow: hidden;
+    }
 
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            margin: 10px;
-            cursor: pointer;
-        }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
 
-        #gallery {
-            display: none;
-            margin-top: 30px;
-        }
+    h1 {
+      color: #e63946;
+    }
 
-        img {
-            width: 200px;
-            margin: 10px;
-            border-radius: 15px;
-        }
-    </style>
+    button {
+      font-size: 18px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yesBtn {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #e74c3c;
+      color: white;
+      position: absolute;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Will you be my Valentine? 💖</h1>
 
-<h1 id="question">Will you be my Valentine? 💘</h1>
+    <button id="yesBtn">Yes 💕</button>
+    <button id="noBtn">No 💔</button>
 
-<div id="buttons">
-    <button id="yesBtn">Yes 💖</button>
-    <button id="noBtn">No 😢</button>
-</div>
+    <div id="message"></div>
+  </div>
 
-<div id="gallery">
-    <h2>Yayyy!! 💕</h2>
-    <p>Here are some of our memories 🥰</p>
-    <img src="pic1.jpg">
-    <img src="pic2.jpg">
-    <img src="pic3.jpg">
-</div>
-
-<script>
-    const yesBtn = document.getElementById("yesBtn");
+  <script>
     const noBtn = document.getElementById("noBtn");
-    const gallery = document.getElementById("gallery");
-    const buttons = document.getElementById("buttons");
-    const question = document.getElementById("question");
+    const yesBtn = document.getElementById("yesBtn");
+    const message = document.getElementById("message");
+
+    const messages = [
+      "Nice try 😏",
+      "So sad 💔",
+      "Please try again 😜",
+      "You can’t say no 😆",
+      "Almost had it!"
+    ];
+
+    let count = 0;
 
     noBtn.addEventListener("mouseover", () => {
-        noBtn.style.position = "relative";
-        noBtn.style.left = Math.random() * 300 + "px";
-        noBtn.style.top = Math.random() * 200 + "px";
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 150);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      message.textContent = messages[count % messages.length];
+      count++;
     });
 
     yesBtn.addEventListener("click", () => {
-        buttons.style.display = "none";
-        question.style.display = "none";
-        gallery.style.display = "block";
+      document.body.innerHTML = `
+        <div style="
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+          font-family: Arial, sans-serif;
+        ">
+          <h1 style="color: #e63946;">
+            Yayyy! 💖 Happy Valentine’s Day! 🥰
+          </h1>
+        </div>
+      `;
     });
-</script>
-
+  </script>
 </body>
 </html>
