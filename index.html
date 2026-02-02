@@ -11,20 +11,20 @@
     height: 100vh;
     background: #ffb6c1;
     font-family: "Trebuchet MS", "Comic Sans MS", cursive;
-    font-style: italic; /* keeps rest italic */
     overflow: hidden;
   }
 
-  /* FIRST PAGE TEXT (NOT ITALIC, BOLD, SIMPLE) */
-  h1 {
+  /* TITLE */
+  #title {
+    position: relative;
     text-align: center;
-    margin-top: 140px;
+    margin-top: 120px;
     font-size: clamp(26px, 6vw, 44px);
     color: #8b004f;
     text-shadow: 0 0 15px #ff4f9a;
-    font-style: normal;       /* ⬅ not italic */
-    font-weight: bold;        /* ⬅ bold */
-    font-family: Arial, Helvetica, sans-serif; /* ⬅ simple font */
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    pointer-events: none; /* IMPORTANT */
   }
 
   #name {
@@ -33,190 +33,29 @@
     font-size: clamp(20px, 5vw, 32px);
   }
 
-  /* BUTTONS (SMALLER) */
-  #yes, #no {
+  /* BUTTONS */
+  button {
     position: absolute;
-    width: 145px;   /* ⬅ smaller */
-    height: 52px;   /* ⬅ smaller */
+    width: 145px;
+    height: 52px;
     border: none;
     border-radius: 12px;
-    font-size: 16px; /* ⬅ smaller text */
+    font-size: 16px;
     cursor: pointer;
     color: white;
-    z-index: 10;
+    z-index: 50;
   }
 
   #yes {
     background: #ff4f9a;
-    left: 22%;
-    top: 60%;
+    left: 15%;
+    top: 62%;
   }
 
   #no {
     background: #d63384;
-    left: 58%;
-    top: 60%;
+    left: 65%;
+    top: 62%;
   }
 
   .bounce {
-    animation: bounce 0.5s;
-  }
-
-  @keyframes bounce {
-    0% { transform: scale(1); }
-    30% { transform: scale(1.15); }
-    60% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-  }
-
-  /* FINAL PAGE */
-  #final {
-    display: none;
-    text-align: center;
-    margin-top: 100px;
-    animation: popGlow 1.2s ease forwards;
-  }
-
-  .finalLine {
-    font-size: clamp(22px, 6vw, 38px);
-    color: #8b004f;
-    margin-top: 14px;
-    text-shadow: 0 0 15px #ff4f9a;
-  }
-
-  @keyframes popGlow {
-    from { opacity: 0; transform: scale(0.6); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  #valPhoto {
-    margin-top: 22px;
-    width: 240px;
-    max-width: 80%;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(255, 79, 154, 0.6);
-  }
-
-  /* FIREWORKS */
-  .spark {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: explode 1.2s linear forwards;
-  }
-
-  @keyframes explode {
-    from { opacity: 1; transform: translate(0,0); }
-    to { opacity: 0; transform: translate(var(--x), var(--y)); }
-  }
-
-  /* HEARTS */
-  .heart {
-    position: absolute;
-    bottom: -30px;
-    font-size: 22px;
-    pointer-events: none;
-    animation: floatUp 6s linear forwards;
-  }
-
-  @keyframes floatUp {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-110vh); opacity: 0; }
-  }
-</style>
-</head>
-
-<body>
-
-<h1 id="title">
-  Will you be my Valentine
-  <span id="name">MADAM G 😍💖</span>
-</h1>
-
-<div id="final">
-  <div class="finalLine">Yay! I knew you would say yes 🥰</div>
-
-  <img id="valPhoto" src="valentine.jpg" alt="Valentine Photo">
-
-  <div class="finalLine">You have made me the happiest person 💕</div>
-  <div class="finalLine">Happy Valentine Day 💖</div>
-</div>
-
-<button id="yes" onclick="yesClick()">Yes 💕</button>
-<button id="no" onclick="noClick()">No 💔</button>
-
-<audio id="bgMusic" loop preload="auto">
-  <source src="love-music.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-  const noTexts = [
-    "Are you sure? 😏",
-    "Really? 🤨",
-    "Try again 😜",
-    "You sure? 😅",
-    "Haha nice try 😂",
-    "No escape 😈",
-    "You can't escape love 💘",
-    "Still no? 😭",
-    "Testing my patience 😤",
-    "Nope, not happening 😆"
-  ];
-
-  let noIndex = 0;
-  let fireTimer;
-
-  function noClick() {
-    const noBtn = document.getElementById("no");
-    noBtn.innerText = noTexts[noIndex % noTexts.length];
-    noIndex++;
-
-    noBtn.classList.remove("bounce");
-    void noBtn.offsetWidth;
-    noBtn.classList.add("bounce");
-
-    const maxX = window.innerWidth - 160;
-    const maxY = window.innerHeight - 90;
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-  }
-
-  function yesClick() {
-    document.getElementById("title").style.display = "none";
-    document.getElementById("yes").style.display = "none";
-    document.getElementById("no").style.display = "none";
-
-    const music = document.getElementById("bgMusic");
-    music.volume = 0.35;
-    music.play();
-
-    fireTimer = setInterval(bigFirework, 450);
-
-    setTimeout(() => {
-      clearInterval(fireTimer);
-      document.getElementById("final").style.display = "block";
-      setInterval(createHeart, 350);
-    }, 3500);
-  }
-
-  function bigFirework() {
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight * 0.6;
-
-    for (let i = 0; i < 45; i++) {
-      const spark = document.createElement("div");
-      spark.className = "spark";
-      spark.style.left = x + "px";
-      spark.style.top = y + "px";
-      spark.style.background = randomColor();
-      spark.style.setProperty("--x", (Math.random()*300 - 150) + "px");
-      spark.style.setProperty("--y", (Math.random()*300 - 150) + "px");
-      document.body.appendChild(spark);
-      setTimeout(() => spark.remove(), 1200);
-    }
-  }
-
-  function createHeart() {
-    const heart = document.
