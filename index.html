@@ -1,61 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine 💖</title>
 
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #ffb6c1;
-    font-family: "Trebuchet MS", "Comic Sans MS", cursive;
-    overflow: hidden;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  background: #ffb6c1;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
 
-  /* TITLE */
-  #title {
-    position: relative;
-    text-align: center;
-    margin-top: 120px;
-    font-size: clamp(26px, 6vw, 44px);
-    color: #8b004f;
-    text-shadow: 0 0 15px #ff4f9a;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    pointer-events: none; /* IMPORTANT */
-  }
+/* TITLE */
+#title {
+  text-align: center;
+  margin-top: 140px;
+  font-size: clamp(26px, 6vw, 42px);
+  color: #8b004f;
+  font-weight: bold;
+}
 
-  #name {
-    display: block;
-    margin-top: 10px;
-    font-size: clamp(20px, 5vw, 32px);
-  }
+#name {
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(20px, 5vw, 30px);
+}
 
-  /* BUTTONS */
-  button {
-    position: absolute;
-    width: 145px;
-    height: 52px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    color: white;
-    z-index: 50;
-  }
+/* BUTTON AREA */
+#btnArea {
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
 
-  #yes {
-    background: #ff4f9a;
-    left: 15%;
-    top: 62%;
-  }
+/* BUTTONS */
+button {
+  width: 140px;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
 
-  #no {
-    background: #d63384;
-    left: 65%;
-    top: 62%;
-  }
+#yes {
+  background: #ff4f9a;
+}
 
-  .bounce {
+#no {
+  background: #d63384;
+}
+
+/* BOUNCE */
+.bounce {
+  animation: bounce 0.4s;
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* FINAL SCREEN */
+#final {
+  display: none;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.finalLine {
+  font-size: clamp(22px, 6vw, 36px);
+  color: #8b004f;
+  margin-top: 12px;
+  text-shadow: 0 0 12px #ff4f9a;
+}
+
+#valPhoto {
+  margin-top: 20px;
+  width: 240px;
+  max-width: 80%;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(255,79,154,0.6);
+}
+
+/* FIREWORKS */
+.spark {
+  pos
