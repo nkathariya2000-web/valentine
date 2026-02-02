@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine</title>
 
@@ -13,8 +12,8 @@
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     overflow: hidden;
     padding: 20px;
   }
@@ -24,7 +23,6 @@
     text-align: center;
     font-size: clamp(22px, 6vw, 40px);
     margin-bottom: 30px;
-    z-index: 10;
   }
 
   #final {
@@ -33,26 +31,22 @@
     color: #ffd1dc;
     text-align: center;
     margin-bottom: 30px;
-    z-index: 10;
   }
 
   .buttons {
     display: flex;
     gap: 20px;
-    width: 100%;
-    max-width: 400px;
+    flex-wrap: wrap;
     justify-content: center;
-    z-index: 10; /* 👈 keep above everything */
   }
 
   button {
-    flex: 1;
-    height: clamp(50px, 8vw, 65px);
+    width: 160px;
+    height: 60px;
+    font-size: 16px;
     border: none;
-    font-size: clamp(14px, 4vw, 18px);
-    cursor: pointer;
     border-radius: 12px;
-    pointer-events: auto;
+    cursor: pointer;
   }
 
   #yes {
@@ -65,25 +59,25 @@
     color: white;
   }
 
-  /* Firework spark */
+  /* Fireworks layer (cannot block clicks) */
+  #fireworks {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .spark {
     position: absolute;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    animation: sparkMove 1s linear forwards;
-    pointer-events: none; /* ✅ THIS FIXES CLICKS */
+    animation: explode 1s linear forwards;
   }
 
-  @keyframes sparkMove {
-    from {
-      opacity: 1;
-      transform: translate(0, 0);
-    }
-    to {
-      opacity: 0;
-      transform: translate(var(--dx), var(--dy));
-    }
+  @keyframes explode {
+    from { opacity: 1; transform: translate(0,0); }
+    to   { opacity: 0; transform: translate(var(--x), var(--y)); }
   }
 </style>
 </head>
@@ -94,17 +88,13 @@
 <div id="final">Yay! 💖 Happy Valentine’s Day 🥰</div>
 
 <div class="buttons" id="buttons">
-  <button id="yes">Yes 💕</button>
-  <button id="no">No 💔</button>
+  <button id="yes" onclick="yesClick()">Yes 💕</button>
+  <button id="no" onclick="noClick()">No 💔</button>
 </div>
 
-<script>
-  const yesBtn = document.getElementById("yes");
-  const noBtn = document.getElementById("no");
-  const title = document.getElementById("title");
-  const finalText = document.getElementById("final");
-  const buttons = document.getElementById("buttons");
+<div id="fireworks"></div>
 
+<script>
   const noTexts = [
     "Are you sure?",
     "Really?",
@@ -119,41 +109,45 @@
   ];
 
   let noIndex = 0;
+  let fireTimer = null;
 
-  noBtn.onclick = () => {
-    noBtn.textContent = noTexts[noIndex % noTexts.length];
+  function noClick() {
+    document.getElementById("no").innerText =
+      noTexts[noIndex % noTexts.length];
     noIndex++;
-  };
+  }
 
-  yesBtn.onclick = () => {
-    title.style.display = "none";
-    buttons.style.display = "none";
-    finalText.style.display = "block";
-    setInterval(createFirework, 800);
-  };
+  function yesClick() {
+    document.getElementById("title").style.display = "none";
+    document.getElementById("buttons").style.display = "none";
+    document.getElementById("final").style.display = "block";
 
-  function createFirework() {
-    const centerX = Math.random() * window.innerWidth;
-    const centerY = Math.random() * window.innerHeight * 0.6;
+    fireTimer = setInterval(fireworkBurst, 700);
+  }
 
-    for (let i = 0; i < 25; i++) {
-      const spark = document.createElement("div");
-      spark.className = "spark";
-      spark.style.left = centerX + "px";
-      spark.style.top = centerY + "px";
-      spark.style.backgroundColor = randomColor();
-      spark.style.setProperty("--dx", (Math.random() * 200 - 100) + "px");
-      spark.style.setProperty("--dy", (Math.random() * 200 - 100) + "px");
-      document.body.appendChild(spark);
-      setTimeout(() => spark.remove(), 1000);
+  function fireworkBurst() {
+    const fw = document.getElementById("fireworks");
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight * 0.6;
+
+    for (let i = 0; i < 20; i++) {
+      const s = document.createElement("div");
+      s.className = "spark";
+      s.style.left = x + "px";
+      s.style.top = y + "px";
+      s.style.background = randomColor();
+      s.style.setProperty("--x", (Math.random()*200 - 100) + "px");
+      s.style.setProperty("--y", (Math.random()*200 - 100) + "px");
+      fw.appendChild(s);
+      setTimeout(() => s.remove(), 1000);
     }
   }
 
   function randomColor() {
-    const colors = ["#ff4f9a", "#ffd700", "#00eaff", "#ffffff", "#ff5733"];
-    return colors[Math.floor(Math.random() * colors.length)];
+    const c = ["#ff4f9a","#ffd700","#00eaff","#ffffff","#ff5733"];
+    return c[Math.floor(Math.random()*c.length)];
   }
 </script>
 
 </body>
-</ht
+</html>
