@@ -152,3 +152,71 @@
 </audio>
 
 <script>
+  const noTexts = [
+    "Are you sure? 😏",
+    "Really? 🤨",
+    "Try again 😜",
+    "You sure? 😅",
+    "Haha nice try 😂",
+    "No escape 😈",
+    "You can't escape love 💘",
+    "Still no? 😭",
+    "Testing my patience 😤",
+    "Nope, not happening 😆"
+  ];
+
+  let noIndex = 0;
+  let fireTimer;
+
+  function noClick() {
+    const noBtn = document.getElementById("no");
+    noBtn.innerText = noTexts[noIndex % noTexts.length];
+    noIndex++;
+
+    noBtn.classList.remove("bounce");
+    void noBtn.offsetWidth;
+    noBtn.classList.add("bounce");
+
+    const maxX = window.innerWidth - 160;
+    const maxY = window.innerHeight - 90;
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+  }
+
+  function yesClick() {
+    document.getElementById("title").style.display = "none";
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "none";
+
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.35;
+    music.play();
+
+    fireTimer = setInterval(bigFirework, 450);
+
+    setTimeout(() => {
+      clearInterval(fireTimer);
+      document.getElementById("final").style.display = "block";
+      setInterval(createHeart, 350);
+    }, 3500);
+  }
+
+  function bigFirework() {
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight * 0.6;
+
+    for (let i = 0; i < 45; i++) {
+      const spark = document.createElement("div");
+      spark.className = "spark";
+      spark.style.left = x + "px";
+      spark.style.top = y + "px";
+      spark.style.background = randomColor();
+      spark.style.setProperty("--x", (Math.random()*300 - 150) + "px");
+      spark.style.setProperty("--y", (Math.random()*300 - 150) + "px");
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 1200);
+    }
+  }
+
+  function createHeart() {
+    const heart = document.
