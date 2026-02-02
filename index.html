@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Will You Be My Valentine?</title>
+  <title>Valentine</title>
 
   <style>
     body {
@@ -17,70 +17,90 @@
       padding: 20px;
     }
 
-    .card {
+    .box {
       width: 100%;
-      max-width: 360px;
+      max-width: 350px;
       background: white;
-      padding: 24px;
-      border-radius: 16px;
+      padding: 20px;
+      border-radius: 15px;
       text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-    h1 {
+    h2 {
       color: #e63946;
-      font-size: 22px;
+      margin-bottom: 10px;
     }
 
-    #message {
-      margin: 12px 0;
-      min-height: 22px;
+    #msg {
+      min-height: 20px;
+      margin-bottom: 10px;
       font-weight: bold;
       color: #555;
     }
 
     button {
-      display: block;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      padding: 12px;
       cursor: pointer;
     }
 
-    #yesBtn {
+    #yes {
       background: #2ecc71;
       color: white;
-      font-size: 16px;
-      padding: 12px;
     }
 
-    #noBtn {
+    #no {
       background: #e74c3c;
       color: white;
-      font-size: 16px;
-      padding: 12px;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>Will you be my Valentine? 💖</h1>
-
-    <div id="message"></div>
-
-    <button id="yesBtn">Yes 💕</button>
-    <button id="noBtn">No 💔</button>
+  <div class="box">
+    <h2>Will you be my Valentine? 💖</h2>
+    <div id="msg"></div>
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 💔</button>
   </div>
 
   <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const message = document.getElementById("message");
+    var yesBtn = document.getElementById("yes");
+    var noBtn = document.getElementById("no");
+    var msg = document.getElementById("msg");
 
-    const messages = [
+    var messages = [
       "Please say yes 🥺",
       "Nice try 😏",
       "Think again 💭",
-      "Better
+      "Better luck next time 😆",
+      "You know you want to 💕"
+    ];
+
+    var msgIndex = 0;
+    var yesFont = 16;
+    var yesPadding = 12;
+
+    noBtn.onclick = function () {
+      msg.textContent = messages[msgIndex];
+      msgIndex = (msgIndex + 1) % messages.length;
+
+      yesFont = yesFont + 2;
+      yesPadding = yesPadding + 4;
+
+      yesBtn.style.fontSize = yesFont + "px";
+      yesBtn.style.padding = yesPadding + "px";
+    };
+
+    yesBtn.onclick = function () {
+      document.body.innerHTML =
+        "<h1 style='color:#e63946;font-family:Arial;text-align:center;'>Yay! 💖 Happy Valentine’s Day 🥰</h1>";
+    };
+  </script>
+</body>
+</html>
