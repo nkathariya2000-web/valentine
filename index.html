@@ -116,13 +116,35 @@
     from { transform: translateY(0); opacity: 1; }
     to { transform: translateY(-110vh); opacity: 0; }
   }
-</style>
+</style>#valPhoto {
+  margin-top: 20px;
+  width: 220px;
+  max-width: 80%;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(255, 79, 154, 0.6);
+  animation: photoPop 1.2s ease forwards;
+}
+
+@keyframes photoPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 </head>
 
 <body>
 
 <h1 id="title">Will you be my Valentine MADAM G😍? 💖</h1>
-<div id="final">Yay! 💖 Happy Valentine’s Day 🥰</div>
+<div id="final">
+  Yay! 💖 Happy Valentine’s Day 🥰
+  <img id="valPhoto" src="valentine.jpg" alt="Valentine" />
+</div>
 
 <button id="yes" onclick="yesClick()">Yes 💕</button>
 <button id="no" onclick="noClick()">No 💔</button>
