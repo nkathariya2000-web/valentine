@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +21,7 @@
     width: 100%;
     text-align: center;
     color: #e63946;
+    z-index: 5;
   }
 
   #msg {
@@ -33,6 +33,7 @@
     font-size: 18px;
     color: #6a4cff;
     font-family: "Comic Sans MS", cursive, sans-serif;
+    z-index: 5;
   }
 
   button {
@@ -43,7 +44,6 @@
     border: none;
     font-size: 16px;
     cursor: pointer;
-    transition: width 0.3s, height 0.3s;
   }
 
   #yes {
@@ -85,8 +85,8 @@
 <button id="no">No 💔</button>
 
 <script>
-  var yesBtn = document.getElementById("yes");
-  var noBtn = document.getElementById("no");
+  var yes = document.getElementById("yes");
+  var no = document.getElementById("no");
   var msg = document.getElementById("msg");
 
   var messages = [
@@ -94,44 +94,40 @@
     "Nice try 😏",
     "Think again 💭",
     "Almost 😉",
-    "You know the answer 💕",
-    "Come on 😄"
+    "Come on 😄",
+    "This is destiny 💕"
   ];
 
-  var clickCount = 0;
-  var maxClicks = 6;
+  var clicks = 0;
 
-  noBtn.onclick = function () {
-    // message
-    msg.textContent = messages[clickCount % messages.length];
+  no.onclick = function () {
+    msg.textContent = messages[clicks % messages.length];
 
     // shake NO
-    noBtn.classList.add("shake");
+    no.classList.add("shake");
     setTimeout(function () {
-      noBtn.classList.remove("shake");
+      no.classList.remove("shake");
     }, 300);
 
-    clickCount++;
+    clicks++;
 
-    // calculate growth
-    var screenW = window.innerWidth * 1.2;
-    var screenH = window.innerHeight * 1.2;
+    // grow YES gradually
+    yes.style.width = (110 + clicks * 40) + "px";
+    yes.style.height = (110 + clicks * 40) + "px";
 
-    var factor = Math.min(clickCount / maxClicks, 1);
-
-    yesBtn.style.width = (110 + (screenW - 110) * factor) + "px";
-    yesBtn.style.height = (110 + (screenH - 110) * factor) + "px";
-
-    // once full screen, center it
-    if (clickCount >= maxClicks) {
-      yesBtn.style.left = "50%";
-      yesBtn.style.top = "50%";
-      yesBtn.style.transform = "translate(-50%, -50%)";
-      noBtn.style.display = "none";
+    // HARD FULLSCREEN ON 6th CLICK
+    if (clicks >= 6) {
+      yes.style.left = "0";
+      yes.style.top = "0";
+      yes.style.width = "100vw";
+      yes.style.height = "100vh";
+      yes.style.borderRadius = "0";
+      yes.style.fontSize = "32px";
+      no.style.display = "none";
     }
   };
 
-  yesBtn.onclick = function () {
+  yes.onclick = function () {
     document.body.innerHTML =
       "<h1 style='margin-top:40vh;text-align:center;color:#e63946;'>Yay! 💖 Happy Valentine’s Day 🥰</h1>";
   };
