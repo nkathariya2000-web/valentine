@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine</title>
@@ -7,83 +7,51 @@
 <style>
   body {
     margin: 0;
-    min-height: 100vh;
-    background: black;
+    height: 100vh;
+    background: #ffb6c1; /* 🌸 pink background */
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    position: relative;
     overflow: hidden;
-    padding: 20px;
   }
 
   h1 {
-    color: #ff4f9a;
+    color: #b30059;
     text-align: center;
+    margin-top: 80px;
     font-size: clamp(22px, 6vw, 40px);
-    margin-bottom: 30px;
-    z-index: 10;
   }
 
-  #final {
-    display: none;
-    font-size: clamp(24px, 7vw, 42px);
-    color: #ffd1dc;
-    text-align: center;
-    margin-bottom: 30px;
-    z-index: 10;
-  }
-
-  .buttons {
-    display: flex;
-    gap: 20px;
-    z-index: 10;
-  }
-
-  button {
+  #yes, #no {
+    position: absolute;
     width: 160px;
     height: 60px;
     font-size: 16px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
+    z-index: 10;
   }
 
   #yes {
-    background: #2ecc71;
+    background: #ff4f9a;
     color: white;
+    left: 20%;
+    top: 60%;
   }
 
   #no {
-    background: #e74c3c;
+    background: #d63384;
     color: white;
+    left: 60%;
+    top: 60%;
   }
 
-  /* Floating NO text */
-  .floating-text {
-    position: absolute;
-    background: pink;
-    color: white;
-    padding: 8px 14px;
-    border-radius: 12px;
-    font-size: 14px;
-    animation: fadeMove 2s ease forwards;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-
-  @keyframes fadeMove {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-20px); }
-  }
-
-  /* Fireworks */
-  #fireworks {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
+  #final {
+    display: none;
+    color: #8b004f;
+    font-size: clamp(24px, 7vw, 42px);
+    text-align: center;
+    margin-top: 120px;
   }
 
   .spark {
@@ -91,12 +59,13 @@
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    animation: explode 1s linear forwards;
+    animation: boom 1s linear forwards;
+    pointer-events: none;
   }
 
-  @keyframes explode {
+  @keyframes boom {
     from { opacity: 1; transform: translate(0,0); }
-    to { opacity: 0; transform: translate(var(--x), var(--y)); }
+    to   { opacity: 0; transform: translate(var(--x), var(--y)); }
   }
 </style>
 </head>
@@ -106,12 +75,8 @@
 <h1 id="title">Will you be my Valentine? 💖</h1>
 <div id="final">Yay! 💖 Happy Valentine’s Day 🥰</div>
 
-<div class="buttons" id="buttons">
-  <button id="yes" onclick="yesClick()">Yes 💕</button>
-  <button id="no" onclick="noClick()">No 💔</button>
-</div>
-
-<div id="fireworks"></div>
+<button id="yes" onclick="yesClick()">Yes 💕</button>
+<button id="no" onclick="noClick()">No 💔</button>
 
 <script>
   const noTexts = [
@@ -124,45 +89,37 @@
     "You can't escape love 💘",
     "Still no? 😭",
     "Testing my patience 😤",
-    "No not happening 😆"
+    "No, not happening 😆"
   ];
 
-  let noIndex = 0;
+  let index = 0;
 
   function noClick() {
     const noBtn = document.getElementById("no");
-    const text = noTexts[noIndex % noTexts.length];
-    noBtn.innerText = text;
-    noIndex++;
+    noBtn.innerText = noTexts[index % noTexts.length];
+    index++;
 
-    createFloatingText(text);
-  }
+    const maxX = window.innerWidth - 180;
+    const maxY = window.innerHeight - 100;
 
-  function createFloatingText(text) {
-    const el = document.createElement("div");
-    el.className = "floating-text";
-    el.innerText = text;
-
-    el.style.left = Math.random() * (window.innerWidth - 150) + "px";
-    el.style.top = Math.random() * (window.innerHeight - 150) + "px";
-
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 2000);
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
   }
 
   function yesClick() {
     document.getElementById("title").style.display = "none";
-    document.getElementById("buttons").style.display = "none";
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "none";
     document.getElementById("final").style.display = "block";
-    setInterval(fireworkBurst, 700);
+
+    setInterval(firework, 700);
   }
 
-  function fireworkBurst() {
-    const fw = document.getElementById("fireworks");
+  function firework() {
     const x = Math.random() * window.innerWidth;
     const y = Math.random() * window.innerHeight * 0.6;
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 25; i++) {
       const s = document.createElement("div");
       s.className = "spark";
       s.style.left = x + "px";
@@ -170,14 +127,14 @@
       s.style.background = randomColor();
       s.style.setProperty("--x", (Math.random()*200 - 100) + "px");
       s.style.setProperty("--y", (Math.random()*200 - 100) + "px");
-      fw.appendChild(s);
+      document.body.appendChild(s);
       setTimeout(() => s.remove(), 1000);
     }
   }
 
   function randomColor() {
-    const c = ["#ff4f9a","#ffd700","#00eaff","#ffffff","#ff5733"];
-    return c[Math.floor(Math.random()*c.length)];
+    const c = ["#ff4f9a", "#ffd700", "#ffffff", "#ff85b3"];
+    return c[Math.floor(Math.random() * c.length)];
   }
 </script>
 
