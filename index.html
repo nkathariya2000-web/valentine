@@ -11,17 +11,20 @@
     height: 100vh;
     background: #ffb6c1;
     font-family: "Trebuchet MS", "Comic Sans MS", cursive;
-    font-style: italic;
+    font-style: italic; /* keeps rest italic */
     overflow: hidden;
   }
 
-  /* FIRST PAGE TEXT */
+  /* FIRST PAGE TEXT (NOT ITALIC, BOLD, SIMPLE) */
   h1 {
     text-align: center;
-    margin-top: 140px; /* ⬅ lowered from top */
+    margin-top: 140px;
     font-size: clamp(26px, 6vw, 44px);
-    color: #8b004f; /* ⬅ same as final page */
+    color: #8b004f;
     text-shadow: 0 0 15px #ff4f9a;
+    font-style: normal;       /* ⬅ not italic */
+    font-weight: bold;        /* ⬅ bold */
+    font-family: Arial, Helvetica, sans-serif; /* ⬅ simple font */
   }
 
   #name {
@@ -30,14 +33,14 @@
     font-size: clamp(20px, 5vw, 32px);
   }
 
-  /* BUTTONS */
+  /* BUTTONS (SMALLER) */
   #yes, #no {
     position: absolute;
-    width: 170px;
-    height: 60px;
+    width: 145px;   /* ⬅ smaller */
+    height: 52px;   /* ⬅ smaller */
     border: none;
-    border-radius: 14px;
-    font-size: 18px;
+    border-radius: 12px;
+    font-size: 16px; /* ⬅ smaller text */
     cursor: pointer;
     color: white;
     z-index: 10;
@@ -45,13 +48,13 @@
 
   #yes {
     background: #ff4f9a;
-    left: 20%;
+    left: 22%;
     top: 60%;
   }
 
   #no {
     background: #d63384;
-    left: 60%;
+    left: 58%;
     top: 60%;
   }
 
@@ -149,86 +152,3 @@
 </audio>
 
 <script>
-  const noTexts = [
-    "Are you sure? 😏",
-    "Really? 🤨",
-    "Try again 😜",
-    "You sure? 😅",
-    "Haha nice try 😂",
-    "No escape 😈",
-    "You can't escape love 💘",
-    "Still no? 😭",
-    "Testing my patience 😤",
-    "Nope, not happening 😆"
-  ];
-
-  let noIndex = 0;
-  let fireTimer;
-
-  function noClick() {
-    const noBtn = document.getElementById("no");
-    noBtn.innerText = noTexts[noIndex % noTexts.length];
-    noIndex++;
-
-    noBtn.classList.remove("bounce");
-    void noBtn.offsetWidth;
-    noBtn.classList.add("bounce");
-
-    const maxX = window.innerWidth - 180;
-    const maxY = window.innerHeight - 100;
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-  }
-
-  function yesClick() {
-    document.getElementById("title").style.display = "none";
-    document.getElementById("yes").style.display = "none";
-    document.getElementById("no").style.display = "none";
-
-    document.getElementById("bgMusic").volume = 0.35;
-    document.getElementById("bgMusic").play();
-
-    fireTimer = setInterval(bigFirework, 450);
-
-    setTimeout(() => {
-      clearInterval(fireTimer);
-      document.getElementById("final").style.display = "block";
-      setInterval(createHeart, 350);
-    }, 3500);
-  }
-
-  function bigFirework() {
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight * 0.6;
-
-    for (let i = 0; i < 45; i++) {
-      const spark = document.createElement("div");
-      spark.className = "spark";
-      spark.style.left = x + "px";
-      spark.style.top = y + "px";
-      spark.style.background = randomColor();
-      spark.style.setProperty("--x", (Math.random()*300 - 150) + "px");
-      spark.style.setProperty("--y", (Math.random()*300 - 150) + "px");
-      document.body.appendChild(spark);
-      setTimeout(() => spark.remove(), 1200);
-    }
-  }
-
-  function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "💖";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.fontSize = (16 + Math.random() * 22) + "px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }
-
-  function randomColor() {
-    const colors = ["#ff4f9a", "#ffd700", "#ffffff", "#ff85b3", "#ff1f7a"];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-</script>
-
-</body>
-</html>
