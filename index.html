@@ -1,127 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine</title>
-
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #ffe6eb;
-    font-family: Arial, sans-serif;
-    position: relative;
-    overflow: hidden;
-  }
-
-  h1 {
-    position: absolute;
-    top: 14%;
-    width: 100%;
-    text-align: center;
-    color: #e63946;
-    z-index: 5;
-  }
-
-  /* RECTANGULAR MESSAGE BOX */
-  #msg {
-    position: absolute;
-    top: 30%;              /* clearly lower than Valentine text */
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ff69b4;   /* pink */
-    color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-block;
-    min-width: 160px;
-    text-align: center;
-    z-index: 5;
-  }
-
-  button {
-    position: absolute;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  #yes {
-    left: 8%;
-    top: 50%;
-    background: #2ecc71;
-    color: white;
-    z-index: 2;
-  }
-
-  #no {
-    right: 8%;
-    top: 50%;
-    background: #e74c3c;
-    color: white;
-    z-index: 3;
-  }
-
-  @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    50% { transform: translateX(6px); }
-    75% { transform: translateX(-6px); }
-    100% { transform: translateX(0); }
-  }
-
-  .shake {
-    animation: shake 0.3s;
-  }
-</style>
-</head>
-
-<body>
-
-<h1>Will you be my Valentine? 💖</h1>
-<div id="msg"></div>
-
-<button id="yes">Yes 💕</button>
-<button id="no">No 💔</button>
-
 <script>
-  var yes = document.getElementById("yes");
-  var no = document.getElementById("no");
-  var msg = document.getElementById("msg");
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
+  const msg = document.getElementById("msg");
 
-  var messages = [
+  const messages = [
     "Try again 😌",
     "Nice try 😏",
     "Think again 💭",
     "Almost 😉",
-    "Come on 😄",
-    "This is destiny 💕"
+    "You know the answer 💕",
+    "Come on 😄"
   ];
 
-  var clicks = 0;
+  let clicks = 0;
 
-  no.onclick = function () {
+  no.onclick = () => {
+    // show message
+    msg.style.display = "block";
     msg.textContent = messages[clicks % messages.length];
 
-    // shake NO
+    // 🔁 shake
     no.classList.add("shake");
-    setTimeout(function () {
-      no.classList.remove("shake");
-    }, 300);
+    setTimeout(() => no.classList.remove("shake"), 300);
 
-    clicks++;
+    // 📳 vibration (mobile only)
+    if (navigator.vibrate) {
+      navigator.vibrate([100, 50, 100]); // vibrate–pause–vibrate
+    }
 
     // grow YES
-    yes.style.width = (110 + clicks * 40) + "px";
-    yes.style.height = (110 + clicks * 40) + "px";
+    clicks++;
+    const size = 110 + clicks * 40;
+    yes.style.width = size + "px";
+    yes.style.height = size + "px";
 
-    // FULL SCREEN ON 6th CLICK
+    // YES fills screen after 6 NOs
     if (clicks >= 6) {
       yes.style.left = "0";
       yes.style.top = "0";
@@ -134,11 +47,8 @@
     }
   };
 
-  yes.onclick = function () {
+  yes.onclick = () => {
     document.body.innerHTML =
       "<h1 style='margin-top:40vh;text-align:center;color:#e63946;'>Yay! 💖 Happy Valentine’s Day 🥰</h1>";
   };
 </script>
-
-</body>
-</html>
