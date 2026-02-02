@@ -8,8 +8,8 @@
   body {
     margin: 0;
     height: 100vh;
-    background: #ffb6c1; /* 🌸 pink background */
-    font-family: Arial, sans-serif;
+    background: #ffb6c1;
+    font-family: 'Comic Sans MS', 'Trebuchet MS', cursive;
     position: relative;
     overflow: hidden;
   }
@@ -18,18 +18,19 @@
     color: #b30059;
     text-align: center;
     margin-top: 80px;
-    font-size: clamp(22px, 6vw, 40px);
+    font-size: clamp(24px, 6vw, 42px);
   }
 
   #yes, #no {
     position: absolute;
-    width: 160px;
+    width: 170px;
     height: 60px;
-    font-size: 16px;
+    font-size: 17px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     z-index: 10;
+    font-family: inherit;
   }
 
   #yes {
@@ -49,23 +50,45 @@
   #final {
     display: none;
     color: #8b004f;
-    font-size: clamp(24px, 7vw, 42px);
+    font-size: clamp(26px, 7vw, 44px);
     text-align: center;
-    margin-top: 120px;
+    margin-top: 100px;
+    z-index: 10;
   }
 
+  /* FIREWORKS */
   .spark {
     position: absolute;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    animation: boom 1s linear forwards;
+    animation: boom 1.2s linear forwards;
     pointer-events: none;
   }
 
   @keyframes boom {
     from { opacity: 1; transform: translate(0,0); }
     to   { opacity: 0; transform: translate(var(--x), var(--y)); }
+  }
+
+  /* HEARTS */
+  .heart {
+    position: absolute;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-110vh);
+      opacity: 0;
+    }
   }
 </style>
 </head>
@@ -93,6 +116,7 @@
   ];
 
   let index = 0;
+  let fireInterval;
 
   function noClick() {
     const noBtn = document.getElementById("no");
@@ -110,33 +134,24 @@
     document.getElementById("title").style.display = "none";
     document.getElementById("yes").style.display = "none";
     document.getElementById("no").style.display = "none";
-    document.getElementById("final").style.display = "block";
 
-    setInterval(firework, 700);
+    fireInterval = setInterval(bigFirework, 500);
+
+    setTimeout(() => {
+      clearInterval(fireInterval);
+      document.getElementById("final").style.display = "block";
+      setInterval(createHeart, 400);
+    }, 3500);
   }
 
-  function firework() {
+  function bigFirework() {
     const x = Math.random() * window.innerWidth;
     const y = Math.random() * window.innerHeight * 0.6;
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 45; i++) {
       const s = document.createElement("div");
       s.className = "spark";
       s.style.left = x + "px";
       s.style.top = y + "px";
       s.style.background = randomColor();
-      s.style.setProperty("--x", (Math.random()*200 - 100) + "px");
-      s.style.setProperty("--y", (Math.random()*200 - 100) + "px");
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
-    }
-  }
-
-  function randomColor() {
-    const c = ["#ff4f9a", "#ffd700", "#ffffff", "#ff85b3"];
-    return c[Math.floor(Math.random() * c.length)];
-  }
-</script>
-
-</body>
-</html>
+      s.style.setProperty("--x", (Math.random()*300 - 150) + "*
