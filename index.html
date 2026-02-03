@@ -6,35 +6,43 @@
 <title>Valentine 💖</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
   margin: 0;
   min-height: 100svh;
-  background: radial-gradient(circle at top, #ffd1dc, #ff9fbf);
-  font-family: "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(180deg, #ffd1dc, #ff9fbf);
+  font-family: system-ui, sans-serif;
   overflow: hidden;
 }
 
-/* ---------- INTRO ---------- */
+/* ---------- FADE ---------- */
+#fade {
+  position: fixed;
+  inset: 0;
+  background: #ff9fbf;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s ease;
+  z-index: 10;
+}
+
+/* ---------- TITLE ---------- */
 #title {
   text-align: center;
   margin-top: 18vh;
   color: #7a003c;
+  transition: transform .4s ease, opacity .4s ease;
 }
 
-#title .main {
-  font-size: clamp(26px, 7vw, 40px);
+#question {
+  font-size: clamp(26px, 7vw, 42px);
   font-weight: 700;
 }
 
-#title .name {
+#name {
   margin-top: 8px;
   font-size: clamp(22px, 6vw, 32px);
-  font-weight: 600;
 }
 
 /* ---------- BUTTONS ---------- */
@@ -54,16 +62,11 @@ button {
   font-weight: 600;
   color: #fff;
   cursor: pointer;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-button:active {
-  transform: scale(0.95);
 }
 
 #yes {
   background: linear-gradient(135deg, #ff5fa2, #ff2f82);
-  box-shadow: 0 8px 20px rgba(255,79,154,0.5);
+  box-shadow: 0 8px 22px rgba(255,79,154,0.5);
 }
 
 #no {
@@ -71,15 +74,17 @@ button:active {
   position: relative;
 }
 
-/* ---------- NO BUTTON ---------- */
-.bounce {
-  animation: bounce .35s ease;
+/* ---------- NO PANIC ---------- */
+.shake {
+  animation: shake .35s;
 }
 
-@keyframes bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-4px,2px); }
+  50% { transform: translate(4px,-2px); }
+  75% { transform: translate(-3px,2px); }
+  100% { transform: translate(0,0); }
 }
 
 /* ---------- FINAL ---------- */
@@ -92,155 +97,47 @@ button:active {
 
 .finalLine {
   font-size: clamp(22px, 6vw, 36px);
-  margin-top: 12px;
-  text-shadow: 0 0 14px rgba(255,79,154,0.7);
+  margin-top: 14px;
+  text-shadow: 0 0 16px rgba(255,79,154,0.7);
+  animation: glow 2.5s ease-in-out infinite;
 }
 
-/* ---------- PHOTO ---------- */
+@keyframes glow {
+  50% { text-shadow: 0 0 28px rgba(255,79,154,1); }
+}
+
 #valPhoto {
-  margin-top: 20px;
+  margin-top: 22px;
   width: min(260px, 85vw);
   border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(255,79,154,0.6);
+  box-shadow: 0 14px 34px rgba(255,79,154,0.6);
 }
 
-/* ---------- FIREWORKS ---------- */
+/* ---------- EFFECTS ---------- */
 .spark {
   position: fixed;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  pointer-events: none;
   animation: explode 1.2s ease-out forwards;
 }
 
 @keyframes explode {
-  to {
-    transform: translate(var(--x), var(--y));
-    opacity: 0;
-  }
+  to { transform: translate(var(--x), var(--y)); opacity: 0; }
 }
 
-/* ---------- HEARTS ---------- */
 .heart {
   position: fixed;
   bottom: -30px;
-  pointer-events: none;
   animation: floatUp linear forwards;
 }
 
 @keyframes floatUp {
-  to {
-    transform: translateY(-120svh);
-    opacity: 0;
-  }
+  to { transform: translateY(-120svh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div id="title">
-  <div class="main">Will you be my Valentine</div>
-  <div class="name">MADAM G 😍💖</div>
-</div>
-
-<div id="btnArea">
-  <button id="yes">Yes 💕</button>
-  <button id="no">No 💔</button>
-</div>
-
-<div id="final">
-  <div class="finalLine">Yay! I knew you would say yes 🥰</div>
-  <img id="valPhoto" src="valentine.jpg" alt="Valentine">
-  <div class="finalLine">You made me the happiest 💕</div>
-  <div class="finalLine">Happy Valentine’s Day 💖</div>
-</div>
-
-<audio id="bgMusic" preload="auto" loop>
-  <source src="love-music.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-const noTexts = [
-  "Are you sure? 😏",
-  "Really? 🤨",
-  "Try again 😜",
-  "Nope 😅",
-  "Nice try 😂",
-  "Not happening 😈",
-  "Love wins 💘",
-  "Still no? 😭"
-];
-
-let noIndex = 0;
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const music = document.getElementById("bgMusic");
-
-/* ---------- NO BUTTON ---------- */
-noBtn.addEventListener("click", () => {
-  noBtn.textContent = noTexts[noIndex++ % noTexts.length];
-
-  noBtn.classList.remove("bounce");
-  void noBtn.offsetWidth;
-  noBtn.classList.add("bounce");
-
-  const x = Math.random() * 160 - 80;
-  const y = Math.random() * 100 - 50;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-});
-
-/* ---------- YES BUTTON ---------- */
-yesBtn.addEventListener("click", async () => {
-  document.getElementById("title").style.display = "none";
-  document.getElementById("btnArea").style.display = "none";
-
-  try {
-    music.volume = 0.35;
-    await music.play();
-  } catch {}
-
-  const fwInterval = setInterval(firework, 400);
-
-  setTimeout(() => {
-    clearInterval(fwInterval);
-    document.getElementById("final").style.display = "block";
-    setInterval(heart, 350);
-  }, 2600);
-});
-
-/* ---------- FIREWORK ---------- */
-function firework() {
-  const x = Math.random() * innerWidth;
-  const y = Math.random() * innerHeight * 0.55;
-  const colors = ["#ff4f9a","#ffd700","#fff","#ff85b3"];
-
-  for (let i = 0; i < 32; i++) {
-    const s = document.createElement("div");
-    s.className = "spark";
-    s.style.left = x + "px";
-    s.style.top = y + "px";
-    s.style.background = colors[Math.floor(Math.random()*colors.length)];
-    s.style.setProperty("--x", (Math.random()*260 - 130) + "px");
-    s.style.setProperty("--y", (Math.random()*260 - 130) + "px");
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 1200);
-  }
-}
-
-/* ---------- HEART ---------- */
-function heart() {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.textContent = "💖";
-  h.style.left = Math.random() * innerWidth + "px";
-  h.style.fontSize = (18 + Math.random()*20) + "px";
-  h.style.animationDuration = (4 + Math.random()*3) + "s";
-  document.body.appendChild(h);
-  setTimeout(() => h.remove(), 7000);
-}
-</script>
-
-</body>
-</html>
+<div id="fade"></d
