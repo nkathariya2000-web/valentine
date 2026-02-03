@@ -2,69 +2,138 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Valentine 💖</title>
 
 <style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: #ffe6ec; /* very light pink */
-  font-family: Arial, sans-serif;
-  text-align: center;
-  color: #000; /* BLACK TEXT – impossible to miss */
+  min-height: 100svh;
+  background: radial-gradient(circle at top, #ffd1dc, #ff9fbf);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  overflow: hidden;
 }
 
-/* TITLE */
+/* ---------- INTRO ---------- */
 #title {
-  margin-top: 80px;
+  text-align: center;
+  margin-top: 18vh;
+  color: #7a003c;
 }
 
-#question {
-  font-size: 32px;
-  font-weight: bold;
+#title .main {
+  font-size: clamp(26px, 7vw, 40px);
+  font-weight: 700;
 }
 
-#name {
-  font-size: 24px;
-  margin-top: 10px;
+#title .name {
+  margin-top: 8px;
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 600;
 }
 
-/* BUTTONS */
+/* ---------- BUTTONS ---------- */
 #btnArea {
-  margin-top: 60px;
+  margin-top: 14vh;
+  display: flex;
+  justify-content: center;
+  gap: 18vw;
 }
 
 button {
-  width: 140px;
+  width: 130px;
   height: 50px;
-  font-size: 18px;
-  margin: 0 20px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
   cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+button:active {
+  transform: scale(0.95);
 }
 
 #yes {
-  background: #ff4f9a;
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #ff5fa2, #ff2f82);
+  box-shadow: 0 8px 20px rgba(255,79,154,0.5);
 }
 
 #no {
-  background: #444;
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #c2185b, #ad1457);
+  position: relative;
 }
 
-/* FINAL */
+/* ---------- NO BUTTON ---------- */
+.bounce {
+  animation: bounce .35s ease;
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- FINAL ---------- */
 #final {
   display: none;
-  margin-top: 60px;
+  text-align: center;
+  margin-top: 12vh;
+  color: #7a003c;
 }
 
 .finalLine {
-  font-size: 26px;
-  margin-top: 15px;
+  font-size: clamp(22px, 6vw, 36px);
+  margin-top: 12px;
+  text-shadow: 0 0 14px rgba(255,79,154,0.7);
+}
+
+/* ---------- PHOTO ---------- */
+#valPhoto {
+  margin-top: 20px;
+  width: min(260px, 85vw);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(255,79,154,0.6);
+}
+
+/* ---------- FIREWORKS ---------- */
+.spark {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: explode 1.2s ease-out forwards;
+}
+
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+/* ---------- HEARTS ---------- */
+.heart {
+  position: fixed;
+  bottom: -30px;
+  pointer-events: none;
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-120svh);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -72,8 +141,8 @@ button {
 <body>
 
 <div id="title">
-  <div id="question">Will you be my Valentine?</div>
-  <div id="name">MADAM G 💖</div>
+  <div class="main">Will you be my Valentine</div>
+  <div class="name">MADAM G 😍💖</div>
 </div>
 
 <div id="btnArea">
@@ -82,37 +151,95 @@ button {
 </div>
 
 <div id="final">
-  <div class="finalLine">YAY!!! 🥰</div>
+  <div class="finalLine">Yay! I knew you would say yes 🥰</div>
+  <img id="valPhoto" src="valentine.jpg" alt="Valentine">
+  <div class="finalLine">You made me the happiest 💕</div>
   <div class="finalLine">Happy Valentine’s Day 💖</div>
 </div>
 
-<script>
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const title = document.getElementById("title");
-const btnArea = document.getElementById("btnArea");
-const final = document.getElementById("final");
-const question = document.getElementById("question");
+<audio id="bgMusic" preload="auto" loop>
+  <source src="love-music.mp3" type="audio/mpeg">
+</audio>
 
-const texts = [
-  "Are you sure?",
-  "Really sure?",
-  "Please 🥺",
-  "Don’t say no 😭"
+<script>
+const noTexts = [
+  "Are you sure? 😏",
+  "Really? 🤨",
+  "Try again 😜",
+  "please😥",
+  "Nice try 😂",
+  "Don't break my heart💔",
+  "Love wins 💘",
+  "Still no? 😭"
 ];
 
-let i = 0;
+let noIndex = 0;
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const music = document.getElementById("bgMusic");
 
-noBtn.onclick = () => {
-  question.textContent = texts[i % texts.length];
-  i++;
-};
+/* ---------- NO BUTTON ---------- */
+noBtn.addEventListener("click", () => {
+  noBtn.textContent = noTexts[noIndex++ % noTexts.length];
 
-yesBtn.onclick = () => {
-  title.style.display = "none";
-  btnArea.style.display = "none";
-  final.style.display = "block";
-};
+  noBtn.classList.remove("bounce");
+  void noBtn.offsetWidth;
+  noBtn.classList.add("bounce");
+
+  const x = Math.random() * 160 - 80;
+  const y = Math.random() * 100 - 50;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+/* ---------- YES BUTTON ---------- */
+yesBtn.addEventListener("click", async () => {
+  document.getElementById("title").style.display = "none";
+  document.getElementById("btnArea").style.display = "none";
+
+  try {
+    music.volume = 0.35;
+    await music.play();
+  } catch {}
+
+  const fwInterval = setInterval(firework, 400);
+
+  setTimeout(() => {
+    clearInterval(fwInterval);
+    document.getElementById("final").style.display = "block";
+    setInterval(heart, 350);
+  }, 2600);
+});
+
+/* ---------- FIREWORK ---------- */
+function firework() {
+  const x = Math.random() * innerWidth;
+  const y = Math.random() * innerHeight * 0.55;
+  const colors = ["#ff4f9a","#ffd700","#fff","#ff85b3"];
+
+  for (let i = 0; i < 32; i++) {
+    const s = document.createElement("div");
+    s.className = "spark";
+    s.style.left = x + "px";
+    s.style.top = y + "px";
+    s.style.background = colors[Math.floor(Math.random()*colors.length)];
+    s.style.setProperty("--x", (Math.random()*260 - 130) + "px");
+    s.style.setProperty("--y", (Math.random()*260 - 130) + "px");
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1200);
+  }
+}
+
+/* ---------- HEART ---------- */
+function heart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = "💖";
+  h.style.left = Math.random() * innerWidth + "px";
+  h.style.fontSize = (18 + Math.random()*20) + "px";
+  h.style.animationDuration = (4 + Math.random()*3) + "s";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 7000);
+}
 </script>
 
 </body>
