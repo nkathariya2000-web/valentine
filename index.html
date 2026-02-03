@@ -37,12 +37,11 @@ body {
   font-weight: 600;
 }
 
-/* ---------- BUTTONS ---------- */
+/* ---------- BUTTON AREA ---------- */
 #btnArea {
+  position: relative;
   margin-top: 14vh;
-  display: flex;
-  justify-content: center;
-  gap: 18vw;
+  height: 200px;
 }
 
 button {
@@ -54,32 +53,20 @@ button {
   font-weight: 600;
   color: #fff;
   cursor: pointer;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-button:active {
-  transform: scale(0.95);
+  position: absolute;
 }
 
 #yes {
+  left: 50%;
+  transform: translateX(-160px);
   background: linear-gradient(135deg, #ff5fa2, #ff2f82);
   box-shadow: 0 8px 20px rgba(255,79,154,0.5);
 }
 
 #no {
+  left: 50%;
+  transform: translateX(30px);
   background: linear-gradient(135deg, #c2185b, #ad1457);
-  position: relative;
-}
-
-/* ---------- NO BUTTON ---------- */
-.bounce {
-  animation: bounce .35s ease;
-}
-
-@keyframes bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
 }
 
 /* ---------- FINAL ---------- */
@@ -96,29 +83,11 @@ button:active {
   text-shadow: 0 0 14px rgba(255,79,154,0.7);
 }
 
-/* ---------- PHOTO ---------- */
 #valPhoto {
   margin-top: 20px;
   width: min(260px, 85vw);
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(255,79,154,0.6);
-}
-
-/* ---------- FIREWORKS ---------- */
-.spark {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: explode 1.2s ease-out forwards;
-}
-
-@keyframes explode {
-  to {
-    transform: translate(var(--x), var(--y));
-    opacity: 0;
-  }
 }
 
 /* ---------- HEARTS ---------- */
@@ -141,7 +110,7 @@ button:active {
 <body>
 
 <div id="title">
-  <div class="main">Will you be my Valentine</div>
+  <div class="main">Will you be my Valentine?</div>
   <div class="name">MADAM G 😍💖</div>
 </div>
 
@@ -153,7 +122,7 @@ button:active {
 <div id="final">
   <div class="finalLine">Yay! I knew you would say yes 🥰</div>
   <img id="valPhoto" src="valentine.jpg" alt="Valentine">
-  <div class="finalLine">You have made me the happiest person💕</div>
+  <div class="finalLine">You made me the happiest person 💕</div>
   <div class="finalLine">Happy Valentine’s Day 💖</div>
 </div>
 
@@ -166,77 +135,58 @@ const noTexts = [
   "Are you sure? 😏",
   "Really? 🤨",
   "Try again 😜",
-  "please😥",
+  "Please 😥",
   "Nice try 😂",
-  "Don't break my heart💔",
-  "Think Again 💘",
+  "Don’t break my heart 💔",
+  "Think again 💘",
   "Still no? 😭"
 ];
 
 let noIndex = 0;
+
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
+const title = document.getElementById("title");
+const btnArea = document.getElementById("btnArea");
+const final = document.getElementById("final");
 const music = document.getElementById("bgMusic");
 
-/* ---------- NO BUTTON ---------- */
-noBtn.addEventListener("click", () => {
-  noBtn.textContent = noTexts[noIndex++ % noTexts.length];
+/* ---------- FAST NO BUTTON ---------- */
+noBtn.addEventListener("pointerdown", () => {
+  noBtn.textContent = noTexts[noIndex % noTexts.length];
+  noIndex++;
 
-  noBtn.classList.remove("bounce");
-  void noBtn.offsetWidth;
-  noBtn.classList.add("bounce");
+  const maxX = window.innerWidth - noBtn.offsetWidth - 10;
+  const maxY = window.innerHeight - noBtn.offsetHeight - 10;
 
-  const x = Math.random() * 160 - 80;
-  const y = Math.random() * 100 - 50;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+  noBtn.style.transform = "none"; // remove translate delay
 });
 
 /* ---------- YES BUTTON ---------- */
-yesBtn.addEventListener("click", async () => {
-  document.getElementById("title").style.display = "none";
-  document.getElementById("btnArea").style.display = "none";
+yesBtn.addEventListener("pointerdown", () => {
+  title.style.display = "none";
+  btnArea.style.display = "none";
+  final.style.display = "block";
 
-  try {
-    music.volume = 0.35;
-    await music.play();
-  } catch {}
+  music.volume = 0.35;
+  music.play().catch(()=>{});
 
-  const fwInterval = setInterval(firework, 400);
-
-  setTimeout(() => {
-    clearInterval(fwInterval);
-    document.getElementById("final").style.display = "block";
-    setInterval(heart, 350);
-  }, 2600);
+  setInterval(createHeart, 300);
 });
 
-/* ---------- FIREWORK ---------- */
-function firework() {
-  const x = Math.random() * innerWidth;
-  const y = Math.random() * innerHeight * 0.55;
-  const colors = ["#ff4f9a","#ffd700","#fff","#ff85b3"];
-
-  for (let i = 0; i < 32; i++) {
-    const s = document.createElement("div");
-    s.className = "spark";
-    s.style.left = x + "px";
-    s.style.top = y + "px";
-    s.style.background = colors[Math.floor(Math.random()*colors.length)];
-    s.style.setProperty("--x", (Math.random()*260 - 130) + "px");
-    s.style.setProperty("--y", (Math.random()*260 - 130) + "px");
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 1200);
-  }
-}
-
-/* ---------- HEART ---------- */
-function heart() {
+/* ---------- HEARTS ---------- */
+function createHeart() {
   const h = document.createElement("div");
   h.className = "heart";
   h.textContent = "💖";
   h.style.left = Math.random() * innerWidth + "px";
-  h.style.fontSize = (18 + Math.random()*20) + "px";
-  h.style.animationDuration = (4 + Math.random()*3) + "s";
+  h.style.fontSize = (18 + Math.random() * 20) + "px";
+  h.style.animationDuration = (4 + Math.random() * 3) + "s";
   document.body.appendChild(h);
   setTimeout(() => h.remove(), 7000);
 }
